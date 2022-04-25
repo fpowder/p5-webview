@@ -1,7 +1,7 @@
 <html>
     <head>
     <script src="/lib/p5/p5.min.js"></script>
-        <body style="touch-action: none; overflow: hidden;">
+        <body style="touch-action: none; overflow: hidden; margin: 0%; padding: 0%;">
             <script>
                 (() => {
                     window.__WEBVIEW_BRIDGE__ = {
@@ -18,9 +18,6 @@
                     window.__WEBVIEW_BRIDGE__.init();
                 })();
 
-                const webViewWeight = document.cookie.webViewWeight;
-                const webViewHeight = document.cookie.webViewHeight
-
                 function getCookie(cookie_name) { 
                     var x, y; 
                     var val = document.cookie.split(';'); 
@@ -32,8 +29,8 @@
                         } 
                     } 
                 }
-                alert(window.innerWidth + '  ' + window.innerHeight);
-                alert(document.cookie);
+                // alert(window.innerWidth + '  ' + window.innerHeight);
+                alert(getCookie('webView'));
 
 
                 function setup() {
