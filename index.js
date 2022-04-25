@@ -8,6 +8,10 @@ const path = require('path');
 app.use(cookieParser());
 app.use('/lib/p5', express.static(path.join(__dirname, 'lib', 'p5')));
 
+app.get('/', (req, res) => {
+    res.redirect(301, '/webview/parking-lot');
+}); 
+
 app.get('/webview/parking-lot', (req, res) => {
 
     //res.clearCookie('webView');
