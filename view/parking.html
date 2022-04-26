@@ -50,12 +50,14 @@
                 /*
                  가로 168 세로 60일경우에는 60 / 168
                 */
-                let xGridCnt = 5;
-                let yGridCnt = 3;
+                let xGridCnt = 10;
+                let yGridCnt = 6;
                 let aspectRatio = yGridCnt/xGridCnt;
 
                 let cnvWidth = window.innerWidth;
                 let cnvHeight = window.innerWidth * aspectRatio;
+
+                let parkingArea;
 
                 function setup() {
                     //createCanvas(window.innerWidth, window.innerHeight);
@@ -63,16 +65,9 @@
 
                     let canvas = createCanvas(cnvWidth , cnvHeight);
                     canvas.position(0, (window.innerHeight - cnvHeight) / 2);
-                    // maxDistance = dist(cnvWidth / 2, cnvHeight / 2, cnvWidth, cnvHeight);
-                    // for(let x = 0; x < cnvWidth; x++){
-                    //     distances[x] = [];
-                    //     for(let y = 0; y < cnvHeight; y++) {
-                    //         let distance = dist(cnvWidth / 2, cnvHeight / 2, x, y);
-                    //         distances[x][y] = (distance / maxDistance) *  255;
-                    //     }
-                    // }
+
                     spacer = window.innerWidth / xGridCnt;
-                    new ParkingArea();
+                    parkingArea = new ParkingArea();
                     // noLoop();
                 }
 
@@ -84,9 +79,9 @@
                     // 그리드 맵의 좌표 점찍기
                     for(let x = 0; x < width; x += spacer) {
                         console.log(xCount++);
-                        for(let y = 0; y < (width / 5 * 3); y += spacer) {
+                        for(let y = 0; y < (width * aspectRatio); y += spacer) {
                             stroke(255);
-                            ellipse(x + spacer /2, y + spacer /2, 1, 1);
+                            ellipse(x + spacer /2, y + spacer /2, 1.5, 1.5);
                             console.log(yCount++);
                         }
                     }
@@ -100,11 +95,13 @@
                             line(0, yLine, xLine, yLine);
                         }
                     }
+
+                    // 주차공간 그리기
+                    parkingArea.display();
                 }
 
-                class ParkingArea extends Jitter {
+                class ParkingArea {
                     constructor() {
-                        super();
                         this.x = random(width);
                         this.y = random(height);
                         this.diameter = random(10, 30);
