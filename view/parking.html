@@ -35,7 +35,7 @@
 
                 let distances = [];
                 let maxDistance;
-                let spacer;
+                
 
 
                 // e-avp 주차장 그리드 width 60, height 168
@@ -50,12 +50,14 @@
                 /*
                  가로 168 세로 60일경우에는 60 / 168
                 */
-                let xGridCnt = 10;
-                let yGridCnt = 6;
+                let xGridCnt = 168;
+                let yGridCnt = 60;
                 let aspectRatio = yGridCnt/xGridCnt;
 
-                let cnvWidth = window.innerWidth;
-                let cnvHeight = window.innerWidth * aspectRatio;
+                let cnvWidth = window.innerWidth * 0.95;
+                let cnvHeight = cnvWidth * aspectRatio;
+                //let spacer;
+                let spacer = cnvWidth / xGridCnt;
 
                 let parkingArea;
 
@@ -64,9 +66,9 @@
                     console.log(width + ' ' + height);
 
                     let canvas = createCanvas(cnvWidth , cnvHeight);
-                    canvas.position(0, (window.innerHeight - cnvHeight) / 2);
+                    canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
 
-                    spacer = window.innerWidth / xGridCnt;
+                    //spacer = window.innerWidth / xGridCnt;
                     parkingArea = new ParkingArea();
                     // noLoop();
                 }
@@ -75,27 +77,39 @@
                 let yCount = 0;
 
                 function draw() {
-                    background('gray');
+                    background(220);
+                    
                     // 그리드 맵의 좌표 점찍기
                     for(let x = 0; x < width; x += spacer) {
                         console.log(xCount++);
                         for(let y = 0; y < (width * aspectRatio); y += spacer) {
                             stroke(255);
-                            ellipse(x + spacer /2, y + spacer /2, 1.5, 1.5);
+                            ellipse(x + spacer /2, y + spacer /2, 1, 1);
                             console.log(yCount++);
                         }
                     }
                     
                     // 그리드 맵의 선 그리기
-                    for(let xLine = 0; xLine <= cnvWidth; xLine += cnvWidth / xGridCnt) {
-                        for(let yLine = 0; yLine <= cnvHeight; yLine += cnvHeight / yGridCnt) {
-                            stroke(0);
-                            strokeWeight(1);
-                            line(xLine, 0, xLine, yLine);
-                            line(0, yLine, xLine, yLine);
-                        }
-                    }
+                    // for(let xLine = 0; xLine <= cnvWidth; xLine += cnvWidth / xGridCnt) {
+                    //     for(let yLine = 0; yLine <= cnvHeight; yLine += cnvHeight / yGridCnt) {
+                    //         stroke(0);
+                    //         strokeWeight(1);
+                    //         line(xLine, 0, xLine, yLine);
+                    //         line(0, yLine, xLine, yLine);
+                    //     }
+                    // }
 
+                    for(let xLine = 0; xLine <= cnvWidth; xLine += spacer) {
+                        stroke(0);
+                        strokeWeight(1);
+                        line(xLine, 0, xLine, height);
+                        line(width, xLine, 0, xLine);
+                    }
+                    strokeWeight(4);
+                    line(0, 0, width, 0);
+                    line(0, 0, 0, height);
+                    line(width, 0, width, height);
+                    line(0, height, width, height);
                     // 주차공간 그리기
                     parkingArea.display();
                 }
