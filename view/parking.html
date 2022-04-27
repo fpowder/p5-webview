@@ -3,40 +3,37 @@
     <script src="/lib/p5/p5.min.js"></script>
         <body style="touch-action: none; overflow: hidden; margin: 0%; padding: 0%;">
             <script>
-                (() => {
-                    window.__WEBVIEW_BRIDGE__ = {
-                        init: function() {
-                            try {
-                                document.addEventListener('message', e => {
-                                    console.log(e);
-                                })
-                            } catch(e) {
-                                console.log(e);
-                            }
-                        }
-                    };
-                    window.__WEBVIEW_BRIDGE__.init();
-                })();
+                // (() => {
+                //     window.__WEBVIEW_BRIDGE__ = {
+                //         init: function() {
+                //             try {
+                //                 document.addEventListener('message', e => {
+                //                     console.log(e);
+                //                 })
+                //             } catch(e) {
+                //                 console.log(e);
+                //             }
+                //         }
+                //     };
+                //     window.__WEBVIEW_BRIDGE__.init();
+                // })();
 
-                function getCookie(cookie_name) { 
-                    var x, y; 
-                    var val = document.cookie.split(';'); 
-                    for (var i = 0; i < val.length; i++) { 
-                        x = val[i].substr(0, val[i].indexOf('=')); 
-                        y = val[i].substr(val[i].indexOf('=') + 1); 
-                        x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기 
-                        if (x == cookie_name) { return unescape(y); // unescape로 디코딩 후 값 리턴 
-                        } 
-                    } 
-                }
+                // function getCookie(cookie_name) { 
+                //     var x, y; 
+                //     var val = document.cookie.split(';'); 
+                //     for (var i = 0; i < val.length; i++) { 
+                //         x = val[i].substr(0, val[i].indexOf('=')); 
+                //         y = val[i].substr(val[i].indexOf('=') + 1); 
+                //         x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기 
+                //         if (x == cookie_name) { return unescape(y); // unescape로 디코딩 후 값 리턴 
+                //         } 
+                //     } 
+                // }
+
                 // alert(window.innerWidth + '  ' + window.innerHeight);
                 // alert(getCookie('webView'));
 
-                let distances = [];
-                let maxDistance;
-
                 // e-avp 주차장 그리드 width 60, height 168
-
                 /*
                     width 59 height 168
                     또는
@@ -45,7 +42,7 @@
                 
                 // 가로에 대한 세로 비율
                 /*
-                 가로 168 세로 60일경우에는 60 / 168
+                    가로 168 세로 60일경우에는 60 / 168
                 */
                 let xGridCnt = 6;
                 let yGridCnt = 10;
@@ -67,31 +64,42 @@
                 let xCenters = [];
                 let yCenters = [];
 
-                for(let x = 0; x < cnvWidth; x += spacer) {
-                    xCordinates.push(x);
-                    xCenters.push(x + (spacer / 2));
-                    for(let y = 0; y < (cnvWidth * aspectRatio); y += spacer) {
-                        yCordinates.push(y);
-                        yCenters.push(y + (spacer / 2))
-                    }
+                for(let x = 0; x < xGridCnt; x++) {
+                    xCordinates.push(x * spacer);
+                    xCenters.push(x * spacer + (spacer / 2));
                 }
 
-                let parkingAreas = [];
+                for(let y = 0; y < yGridCnt; y++) {
+                    yCordinates.push(y * spacer);
+                    yCenters.push(y * spacer + (spacer / 2))
+                }
 
+                //test
+                let jitter;
+
+                let parkingAreas = [];
+                let walls;
                 function setup() {
-                    //createCanvas(window.innerWidth, window.innerHeight);
-                    console.log(width + ' ' + height);
 
                     let canvas = createCanvas(cnvWidth , cnvHeight);
                     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
 
                     //spacer = window.innerWidth / xGridCnt;
-                    parkingAreas.push(new ParkingArea());
                     // noLoop();
+
+                    jitter =  new Jitter();
+
+                    // parkingArea set
+                    for(let i = 0; i < pStartPoints.length; i ++) {
+                        parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
+                    }
+
+                    // wall set
+                    walls = new Wall();
                 }
 
-                let xCount = 0;
-                let yCount = 0;
+                // let xCount = 0;
+                // let yCount = 0;
 
                 function draw() {
                     background(255);
@@ -100,20 +108,11 @@
                     for(let x = 0; x < width; x += spacer) {
                         for(let y = 0; y < (width * aspectRatio); y += spacer) {
                             stroke(20);
-                            ellipse(x + spacer /2, y + spacer /2, 1, 1);
+                            ellipse(x + spacer /2, y + spacer /2, 3, 3);
                         }
                     }
                     
                     // 그리드 맵의 선 그리기
-                    // for(let xLine = 0; xLine <= cnvWidth; xLine += cnvWidth / xGridCnt) {
-                    //     for(let yLine = 0; yLine <= cnvHeight; yLine += cnvHeight / yGridCnt) {
-                    //         stroke(0);
-                    //         strokeWeight(1);
-                    //         line(xLine, 0, xLine, yLine);
-                    //         line(0, yLine, xLine, yLine);
-                    //     }
-                    // }
-
                     for(let yLine = 0; yLine <= cnvHeight; yLine += spacer) {
                         stroke(0);
                         strokeWeight(0.5);
@@ -124,12 +123,22 @@
                     line(width-1, 0, width-1, height-1);
                     line(0, height-1, width-1, height-1);
 
-                    // 주차공간 그리기
-                    parkingAreas[0].display();
-                    parkingAreas[0].move();
+                    // jitter test
+                    jitter.display();
+                    jitter.move();
+
+                    // parkingArea display
+                    for(let i = 0; i < parkingAreas.length; i++) {
+                        parkingAreas[i].display();
+                    }
+
+                    // walls display
+                    walls.display();
+
+                    //noLoop();
                 }
 
-                class ParkingArea {
+                class Jitter {
                     constructor() {
                         this.x = random(width);
                         this.y = random(height);
@@ -144,6 +153,74 @@
 
                     display() {
                         ellipse(this.x, this.y, this.diameter, this.diameter);
+                    }
+                }
+                
+                // parking area 시작 자연수 좌표
+                const pStartPoints = [
+                    {
+                        x: 2,
+                        y: 2
+                    },
+                    {
+                        x: 2,
+                        y: 4
+                    },
+                    {
+                        x: 2,
+                        y: 6
+                    }
+                ];
+                
+                // PA => Parking Area
+                class ThreeByTwoPA {
+                    constructor(x, y) {
+                        this.startX = xCordinates[x];
+                        this.startY = yCordinates[y];
+
+                        this.width = xCordinates[x + 3] - xCordinates[x];
+                        this.height = yCordinates[y + 2] - yCordinates[y];
+                    }
+
+                    display() {
+                        stroke('rgb(40, 199, 69)');
+                        //stroke(51);
+                        fill(115, 235, 125);
+                        strokeWeight(3);
+                        rect(this.startX, this.startY, this.width, this.height);
+                    }
+                }
+
+                const wallStartEndPoints =[
+                    {
+                        start: { x: 5, y: 0 },
+                        end: { x: 5, y: 9 }
+                    }
+                ];
+
+                class Wall {
+                    contructor() {
+                        this.walls = wallStartEndPoints;
+                        this.wallsLength = wallStartEndPoints.length;
+                    }
+
+                    display() {
+                        for(let i = 0; i < wallStartEndPoints.length; i++) {
+                            let wall = wallStartEndPoints[i]; 
+
+                            for(let j = 0; j <= wall.end.x - wall.start.x; j++) {
+
+                                for(let k = 0; k <= wall.end.y - wall.start.y; k++) {
+                                    stroke('rgb(47, 48, 48');
+                                    fill(93, 97, 97);
+                                    strokeWeight(2);
+                                    rect(xCordinates[wall.start.x + j], yCordinates[wall.start.y + k], spacer, spacer);
+
+                                }
+
+                            }
+
+                        }
                     }
                 }
 
