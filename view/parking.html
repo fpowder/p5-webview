@@ -32,11 +32,8 @@
                 // alert(window.innerWidth + '  ' + window.innerHeight);
                 // alert(getCookie('webView'));
 
-
                 let distances = [];
                 let maxDistance;
-                
-
 
                 // e-avp 주차장 그리드 width 60, height 168
 
@@ -62,7 +59,24 @@
                 //let spacer;
                 let spacer = cnvHeight / yGridCnt;
 
-                let parkingArea;
+                //자연수 좌표계[(0,0) (1,1)....]를 canvas의 좌표계에 mapping한다. [(0,0) (5.55, 23.34)....]
+                let xCordinates = [];
+                let yCordinates = [];
+
+                //canvas에 그려전 각 cell의 중심 좌표
+                let xCenters = [];
+                let yCenters = [];
+
+                for(let x = 0; x < cnvWidth; x += spacer) {
+                    xCordinates.push(x);
+                    xCenters.push(x + (spacer / 2));
+                    for(let y = 0; y < (cnvWidth * aspectRatio); y += spacer) {
+                        yCordinates.push(y);
+                        yCenters.push(y + (spacer / 2))
+                    }
+                }
+
+                let parkingAreas = [];
 
                 function setup() {
                     //createCanvas(window.innerWidth, window.innerHeight);
@@ -72,7 +86,7 @@
                     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
 
                     //spacer = window.innerWidth / xGridCnt;
-                    parkingArea = new ParkingArea();
+                    parkingAreas.push(new ParkingArea());
                     // noLoop();
                 }
 
@@ -84,11 +98,9 @@
                     
                     // 그리드 맵의 좌표 점찍기
                     for(let x = 0; x < width; x += spacer) {
-                        console.log(xCount++);
                         for(let y = 0; y < (width * aspectRatio); y += spacer) {
-                            stroke(220);
+                            stroke(20);
                             ellipse(x + spacer /2, y + spacer /2, 1, 1);
-                            console.log(yCount++);
                         }
                     }
                     
@@ -109,12 +121,12 @@
                         line(yLine, 0, yLine, height);
                     }
                     strokeWeight(0.5);
-                    // line(0, 0, width, 0);
-                    // line(0, 0, 0, height);
                     line(width-1, 0, width-1, height-1);
                     line(0, height-1, width-1, height-1);
+
                     // 주차공간 그리기
-                    parkingArea.display();
+                    parkingAreas[0].display();
+                    parkingAreas[0].move();
                 }
 
                 class ParkingArea {
