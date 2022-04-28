@@ -1,7 +1,7 @@
 <html>
     <head>
     <script src="/lib/p5/p5.min.js"></script>
-        <body style="touch-action: none; overflow: hidden; margin: 0%; padding: 0%;">
+        <body style="touch-action: auto; overflow: hidden; margin: 0%; padding: 0%;">
             <script>
                 // (() => {
                 //     window.__WEBVIEW_BRIDGE__ = {
@@ -44,11 +44,11 @@
                 /*
                     가로 168 세로 60일경우에는 60 / 168
                 */
-                let xGridCnt = 6;
-                let yGridCnt = 10;
+                // let xGridCnt = 6;
+                // let yGridCnt = 10;
 
-                // let xGridCnt = 60;
-                // let yGridCnt = 168;
+                let xGridCnt = 60;
+                let yGridCnt = 168;
 
                 let aspectRatio = yGridCnt/xGridCnt;
                 let reverseAspectRatio = xGridCnt/yGridCnt;
