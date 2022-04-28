@@ -46,7 +46,10 @@
                 */
                 let xGridCnt = 6;
                 let yGridCnt = 10;
-                
+
+                // let xGridCnt = 60;
+                // let yGridCnt = 168;
+
                 let aspectRatio = yGridCnt/xGridCnt;
                 let reverseAspectRatio = xGridCnt/yGridCnt;
 
@@ -79,6 +82,7 @@
 
                 let parkingAreas = [];
                 let walls;
+
                 function setup() {
 
                     let canvas = createCanvas(cnvWidth , cnvHeight);
@@ -90,6 +94,7 @@
                     jitter =  new Jitter();
 
                     // parkingArea set
+                    
                     for(let i = 0; i < pStartPoints.length; i ++) {
                         parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
                     }
@@ -101,6 +106,13 @@
                 // let xCount = 0;
                 // let yCount = 0;
 
+                // function mousePressed(event) {
+                //     console.log(event);
+                //     for(let i = 0; i < parkingAreas.length; i++){
+                //         parkingAreas[i].clicked();
+                //     }
+                // }
+                
                 function draw() {
                     background(255);
                     
@@ -135,8 +147,10 @@
                     // walls display
                     walls.display();
 
-                    //noLoop();
+                    //noLoop(); 
                 }
+
+                
 
                 class Jitter {
                     constructor() {
@@ -180,15 +194,26 @@
 
                         this.width = xCordinates[x + 3] - xCordinates[x];
                         this.height = yCordinates[y + 2] - yCordinates[y];
+
+                        this.lineCol = color(40, 199, 69);
+                        this.col = color(115, 235, 125);
+                    }
+ 
+                    display() {
+                        push();
+                        stroke(this.lineCol);
+                        //stroke(51);
+                        fill(this.col);
+                        strokeWeight(3);
+                        let parkingRect = rect(this.startX, this.startY, this.width, this.height);
+                        pop();
                     }
 
-                    display() {
-                        stroke('rgb(40, 199, 69)');
-                        //stroke(51);
-                        fill(115, 235, 125);
-                        strokeWeight(3);
-                        rect(this.startX, this.startY, this.width, this.height);
+                    clicked() {
+                        console.log('clicked'); 
+                        this.col = color(255, 0, 200);   
                     }
+
                 }
 
                 const wallStartEndPoints =[
@@ -205,22 +230,23 @@
                     }
 
                     display() {
+                        push();
                         for(let i = 0; i < wallStartEndPoints.length; i++) {
                             let wall = wallStartEndPoints[i]; 
 
                             for(let j = 0; j <= wall.end.x - wall.start.x; j++) {
 
                                 for(let k = 0; k <= wall.end.y - wall.start.y; k++) {
-                                    stroke('rgb(47, 48, 48');
-                                    fill(93, 97, 97);
+                                    stroke(47, 48, 48);
                                     strokeWeight(2);
+                                    fill(93, 97, 97);
                                     rect(xCordinates[wall.start.x + j], yCordinates[wall.start.y + k], spacer, spacer);
-
                                 }
 
                             }
 
                         }
+                        pop();
                     }
                 }
 
