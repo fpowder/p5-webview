@@ -44,18 +44,38 @@
                 /*
                     가로 168 세로 60일경우에는 60 / 168
                 */
-                // let xGridCnt = 6;
-                // let yGridCnt = 10;
+                let xGridCnt = 6;
+                let yGridCnt = 10;
 
-                let xGridCnt = 60;
-                let yGridCnt = 168;
+                // let xGridCnt = 60;
+                // let yGridCnt = 168;
 
                 let aspectRatio = yGridCnt/xGridCnt;
                 let reverseAspectRatio = xGridCnt/yGridCnt;
 
-                let cnvHeight = window.innerHeight * 0.95;
+                let screenAspect = window.innerHeight / window.innerWidth;
+                let reverseScreenAspect = window.innerWidth / window.innerHeight;
+
+                let cnvHeight = window.innerHeight * 0.5;
                 let cnvWidth = cnvHeight * reverseAspectRatio;
+
+                alert('window.innerHeight')
                 
+                //div 요소 위치 조정용 변수
+                /*
+                    각 canvas 요소위에 html div요소를 mapping하여, mouse click event를 정의한다.
+                    div position 요소는 canvas요소의 좌측 margin 너비 만큼, 세로 margin만큼 더해져야 한다.
+                */
+                let divAdjHeight = (window.innerHeight - cnvHeight) / 2;
+                let divAdjWidth = (window.innerWidth - cnvWidth) / 2;
+
+                // let divAdjHeight = (window.innerHeight - cnvHeight) / 2;
+                // let divAdjWidth = 0;
+
+
+                alert(divAdjWidth);
+                alert(divAdjHeight);
+
                 //let spacer;
                 let spacer = cnvHeight / yGridCnt;
 
@@ -77,6 +97,8 @@
                     yCenters.push(y * spacer + (spacer / 2))
                 }
 
+                let canvas;
+
                 //test
                 let jitter;
 
@@ -85,8 +107,14 @@
 
                 function setup() {
 
-                    let canvas = createCanvas(cnvWidth , cnvHeight);
-                    canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
+                    canvas = createCanvas(cnvWidth , cnvHeight);
+                    canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
+
+                    alert((window.innerWidth - cnvWidth) / 2);
+                    alert(canvas.x);
+
+                    alert((window.innerHeight - cnvHeight) / 2);
+                    alert(canvas.y);
 
                     //spacer = window.innerWidth / xGridCnt;
                     // noLoop();
@@ -101,6 +129,7 @@
 
                     // wall set
                     walls = new Wall();
+
                 }
 
                 // let xCount = 0;
@@ -197,6 +226,18 @@
 
                         this.lineCol = color(40, 199, 69);
                         this.col = color(115, 235, 125);
+
+                        let dom = createDiv();
+                        dom.size(this.width, this.height);
+                        dom.position(this.startX + divAdjWidth, this.startY + divAdjHeight);
+                        // dom.addEventListener('touchstart', () => {
+                        //     dom.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
+                        // });
+                        dom.mousePressed(() => {
+                            alert('pressed : ' + this.startX + ',' + this.startY);
+                        });
+                        console.log(dom);
+                        this.dom = dom;
                     }
  
                     display() {
@@ -205,7 +246,7 @@
                         //stroke(51);
                         fill(this.col);
                         strokeWeight(3);
-                        let parkingRect = rect(this.startX, this.startY, this.width, this.height);
+                        rect(this.startX, this.startY, this.width, this.height);
                         pop();
                     }
 
