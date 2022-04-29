@@ -35,15 +35,12 @@
 
                 // e-avp 주차장 그리드 width 60, height 168
                 /*
-                    width 59 height 168
+                    width 59 height 143
                     또는
-                    width 168, height 59
+                    width 143, height 59
                 */
                 
-                // 가로에 대한 세로 비율
-                /*
-                    가로 168 세로 60일경우에는 60 / 168
-                */
+                // 가로 세로 cell수
                 let xGridCnt = 6;
                 let yGridCnt = 10;
 
@@ -55,12 +52,16 @@
 
                 let screenAspect = window.innerHeight / window.innerWidth;
                 let reverseScreenAspect = window.innerWidth / window.innerHeight;
-
-                let cnvHeight = window.innerHeight * 0.5;
+                
+                let cnvHeight = window.innerHeight * 0.95;
                 let cnvWidth = cnvHeight * reverseAspectRatio;
 
-                alert('window.innerHeight')
-                
+                if(cnvWidth > window.innerWidth) {
+                    let reduceRatio = window.innerWidth / cnvWidth;
+                    cnvWidth = cnvWidth * reduceRatio;
+                    cnvHeight = cnvHeight * reduceRatio; 
+                }
+
                 //div 요소 위치 조정용 변수
                 /*
                     각 canvas 요소위에 html div요소를 mapping하여, mouse click event를 정의한다.
@@ -72,11 +73,7 @@
                 // let divAdjHeight = (window.innerHeight - cnvHeight) / 2;
                 // let divAdjWidth = 0;
 
-
-                alert(divAdjWidth);
-                alert(divAdjHeight);
-
-                //let spacer;
+                // 한 cell 변의 길이
                 let spacer = cnvHeight / yGridCnt;
 
                 //자연수 좌표계[(0,0) (1,1)....]를 canvas의 좌표계에 mapping한다. [(0,0) (5.55, 23.34)....]
@@ -105,23 +102,15 @@
                 let parkingAreas = [];
                 let walls;
 
+                let entrance;
+                let exit;
+
                 function setup() {
 
                     canvas = createCanvas(cnvWidth , cnvHeight);
                     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
 
-                    alert((window.innerWidth - cnvWidth) / 2);
-                    alert(canvas.x);
-
-                    alert((window.innerHeight - cnvHeight) / 2);
-                    alert(canvas.y);
-
-                    //spacer = window.innerWidth / xGridCnt;
-                    // noLoop();
-
                     jitter =  new Jitter();
-
-                    // parkingArea set
                     
                     for(let i = 0; i < pStartPoints.length; i ++) {
                         parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
@@ -129,6 +118,9 @@
 
                     // wall set
                     walls = new Wall();
+
+                    // parking lot entrance
+                    entrance = new Entrance();
 
                 }
 
@@ -149,7 +141,7 @@
                     for(let x = 0; x < width; x += spacer) {
                         for(let y = 0; y < (width * aspectRatio); y += spacer) {
                             stroke(20);
-                            ellipse(x + spacer /2, y + spacer /2, 3, 3);
+                            ellipse(x + spacer /2, y + spacer /2, 2, 2);
                         }
                     }
                     
@@ -176,10 +168,11 @@
                     // walls display
                     walls.display();
 
+                    // parking lot entrance display
+                    entrance.display();
+
                     //noLoop(); 
                 }
-
-                
 
                 class Jitter {
                     constructor() {
@@ -234,12 +227,19 @@
                         //     dom.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
                         // });
                         dom.mousePressed(() => {
-                            alert('pressed : ' + this.startX + ',' + this.startY);
+                            alert('This is parking area! : ' + this.startX + ',' + this.startY);
                         });
-                        console.log(dom);
                         this.dom = dom;
+
+                        //this.speed = 1;
                     }
- 
+                    
+                    // move() {
+                    //     this.startX += random(-this.speed, this.speed);
+                    //     this.startY += random(-this.speed, this.speed);
+                    //     this.dom.position(this.startX + divAdjWidth, this.startY + divAdjHeight);
+                    // }
+
                     display() {
                         push();
                         stroke(this.lineCol);
@@ -288,6 +288,90 @@
 
                         }
                         pop();
+                    }
+                }
+
+                class Entrance {
+                    constructor() {
+                        let startX = xCordinates[3] + (spacer/2);
+                        let startY = yCordinates[0];
+
+                        let xPoints = [];
+                        let yPoints = [];
+
+                        this.xPoints = [];
+                        this.yPoints = [];
+
+                        
+                            
+                    }
+
+                    display() {
+                        push();
+                        beginShape(LINES);
+
+                        // vertex(this.curX, this.curY);
+                        // this.curY += this.curY + (spacer/2);
+                        // vertex(this.curX, this.curY);
+                        // this.curX = this.curX += spacer;
+                        // vertex(this.curX, this.curY);
+                        // this.curY = this.curY + spacer;
+                        // vertex(this.curX, this.curY);
+                        // this.curX -= this.curX - spacer;
+                        // vertex(this.curX, this.curY);
+                        // this.curY += this.curY + (spacer / 2);
+                        // vertex(this.curX, this.curY);
+
+                        console.log(this.curX);
+                        console.log(typeof(this.curX));
+                        console.log(this.curY);
+                        vertex(this.curX, this.curY);
+                        //this.curY = this.curY - (2 * spacer);
+                        vertex(878, 2323);
+                        // this.curX = this.curX - spacer;
+                        // vertex(this.curX, this.curY);
+                        // this.curY = this.startY;
+                        // vertex(this.curX, this.curY);
+                        endShape();
+                        pop();
+                    }
+                }
+
+                class Exit {
+
+                }
+
+                class Car {
+                    constructor(startPoint, endPoint) {
+                        this.uuid = 'car1';
+
+                        this.curX = xCordinates[0] + (spacer / 2);
+                        this.curY = yCordinates[0] + (spacer / 2);
+
+                        this.currentPosition = {
+                            x: this.curX,
+                            y: this.curY
+                        }
+
+                        this.lastPosition = {
+                            x: this.curX,
+                            y: this.curY
+                        }
+
+                        // car size => 2 cell by 1 cell
+                        this.length = 2 * spacer;
+                        this.width = 1 * spacer;
+
+                        this.speed = 1;
+                        this.direction;
+                    }
+
+                    move() {
+
+                    }
+
+                    display() {
+
                     }
                 }
 
