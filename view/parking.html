@@ -1,6 +1,7 @@
 <html>
     <head>
     <script src="/lib/p5/p5.min.js"></script>
+    <script src="/lib/p5/addons/p5.collide2d.js"></script>
         <body style="touch-action: auto; overflow: hidden; margin: 0%; padding: 0%;">
             <script>
                 // (() => {
@@ -50,8 +51,8 @@
                 let aspectRatio = yGridCnt/xGridCnt;
                 let reverseAspectRatio = xGridCnt/yGridCnt;
 
-                let screenAspect = window.innerHeight / window.innerWidth;
-                let reverseScreenAspect = window.innerWidth / window.innerHeight;
+                // let screenAspect = window.innerHeight / window.innerWidth;
+                // let reverseScreenAspect = window.innerWidth / window.innerHeight;
                 
                 let cnvHeight = window.innerHeight * 0.95;
                 let cnvWidth = cnvHeight * reverseAspectRatio;
@@ -105,6 +106,9 @@
                 let entrance;
                 let exit;
 
+                // test car
+                let car = [];
+
                 function setup() {
 
                     canvas = createCanvas(cnvWidth, cnvHeight);
@@ -126,7 +130,7 @@
                     exit = new Exit();
 
                     // test Car
-                    car = new Car();                    
+                    car.push(new Car());                    
 
                 }
 
@@ -182,9 +186,12 @@
                     exit.display();
 
                     // test car display
-                    car.display();
-                    // car.move();
-                    //noLoop(); 
+                    car[0].display();
+                    car[0].move();
+                    car[0].exit();
+                    car[0].remove();
+
+                    // noLoop(); 
                 }
 
                 class Jitter {
@@ -402,6 +409,12 @@
                         this.xPoints = xPoints;
                         this.yPoints = yPoints;
 
+                        this.poly = [];
+
+                        for(let i = 3; i < 5; i++) {
+                            this.poly.push(createVector(xPoints[i], yPoints[i]));
+                        }
+
                     }
 
                     display() {
@@ -445,6 +458,22 @@
 
                         this.speed = 1;
                         this.direction;
+
+                        this.rect;
+                    }
+
+                    exit() {
+                        let exitCollision = collideRectPoly(this.curX, this.curY, this.length, this.width, exit.poly);
+                        if(exitCollision) {
+                            this.length -= 1;
+                        }
+                    }
+
+                    remove() {
+                        console.log(this.length);
+                        if(this.length <= 0) {
+                            this.length = 0;
+                        }
                     }
 
                     move() {
@@ -456,9 +485,14 @@
                         stroke(20, 20, 128);
                         strokeWeight(2);
                         fill(98, 23, 133);
-                        rect(this.curX, this.curY, this.length, this.width, 10);
+                        this.rect = rect(this.curX, this.curY, this.length, this.width, 10);
+                        // rect(mouseX, mouseY, this.length, this.width, 10);
+                        // let hit = collideRectPoly(mouseX, mouseY, this.length, this.width, exit.poly);
+                        // console.log(hit);
                         pop();
                     }
+
+
                 }
 
             </script>
