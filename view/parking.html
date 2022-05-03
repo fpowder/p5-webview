@@ -107,7 +107,7 @@
 
                 function setup() {
 
-                    canvas = createCanvas(cnvWidth , cnvHeight);
+                    canvas = createCanvas(cnvWidth, cnvHeight);
                     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
 
                     jitter =  new Jitter();
@@ -124,6 +124,9 @@
 
                     // parking lot exit
                     exit = new Exit();
+
+                    // test Car
+                    car = new Car();                    
 
                 }
 
@@ -178,6 +181,9 @@
                     // parking lot exit display
                     exit.display();
 
+                    // test car display
+                    car.display();
+                    // car.move();
                     //noLoop(); 
                 }
 
@@ -421,7 +427,7 @@
                         this.uuid = 'car1';
 
                         this.curX = xCordinates[0] + (spacer / 2);
-                        this.curY = yCordinates[0] + (spacer / 2);
+                        this.curY = yCordinates[8] + (spacer / 2);
 
                         this.currentPosition = {
                             x: this.curX,
@@ -442,11 +448,16 @@
                     }
 
                     move() {
-
+                        this.curX += 1;
                     }
 
                     display() {
-
+                        push();
+                        stroke(20, 20, 128);
+                        strokeWeight(2);
+                        fill(98, 23, 133);
+                        rect(this.curX, this.curY, this.length, this.width, 10);
+                        pop();
                     }
                 }
 
