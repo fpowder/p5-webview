@@ -122,6 +122,9 @@
                     // parking lot entrance
                     entrance = new Entrance();
 
+                    // parking lot exit
+                    exit = new Exit();
+
                 }
 
                 // let xCount = 0;
@@ -137,6 +140,7 @@
                 function draw() {
                     background(255);
                     
+                    push();
                     // 그리드 맵의 좌표 점찍기
                     for(let x = 0; x < width; x += spacer) {
                         for(let y = 0; y < (width * aspectRatio); y += spacer) {
@@ -155,7 +159,7 @@
                     strokeWeight(0.5);
                     line(width-1, 0, width-1, height-1);
                     line(0, height-1, width-1, height-1);
-
+                    pop();
                     // jitter test
                     jitter.display();
                     jitter.move();
@@ -170,6 +174,9 @@
 
                     // parking lot entrance display
                     entrance.display();
+                    
+                    // parking lot exit display
+                    exit.display();
 
                     //noLoop(); 
                 }
@@ -293,52 +300,120 @@
 
                 class Entrance {
                     constructor() {
-                        let startX = xCordinates[3] + (spacer/2);
+
+                        let startX = xCordinates[5];
                         let startY = yCordinates[0];
 
                         let xPoints = [];
                         let yPoints = [];
 
-                        this.xPoints = [];
-                        this.yPoints = [];
+                        xPoints.push(startX);
+                        yPoints.push(startY);
 
-                        
-                            
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (1 / 2 * spacer));
+
+                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
+                        yPoints.push(startY + (1 / 2 * spacer));
+
+                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
+                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (2 * spacer));
+
+                        xPoints.push(startX);
+                        yPoints.push(startY + (2 * spacer));
+
+                        xPoints.push(startX);
+                        yPoints.push(startY);
+
+                        this.xPoints = xPoints;
+                        this.yPoints = yPoints;
+
                     }
 
                     display() {
+
                         push();
-                        beginShape(LINES);
-
-                        // vertex(this.curX, this.curY);
-                        // this.curY += this.curY + (spacer/2);
-                        // vertex(this.curX, this.curY);
-                        // this.curX = this.curX += spacer;
-                        // vertex(this.curX, this.curY);
-                        // this.curY = this.curY + spacer;
-                        // vertex(this.curX, this.curY);
-                        // this.curX -= this.curX - spacer;
-                        // vertex(this.curX, this.curY);
-                        // this.curY += this.curY + (spacer / 2);
-                        // vertex(this.curX, this.curY);
-
-                        console.log(this.curX);
-                        console.log(typeof(this.curX));
-                        console.log(this.curY);
-                        vertex(this.curX, this.curY);
-                        //this.curY = this.curY - (2 * spacer);
-                        vertex(878, 2323);
-                        // this.curX = this.curX - spacer;
-                        // vertex(this.curX, this.curY);
-                        // this.curY = this.startY;
-                        // vertex(this.curX, this.curY);
-                        endShape();
+                        beginShape();
+                        stroke(25, 107, 230);
+                        strokeWeight(2);
+                        fill(99, 153, 235);
+                        for(let i = 0; i < 8; i++) {
+                            
+                            vertex(this.xPoints[i], this.yPoints[i]);
+                            
+                        }
+                        endShape(CLOSE);
                         pop();
+
                     }
                 }
 
                 class Exit {
+                    constructor() {
 
+                        let startX = xCordinates[5];
+                        let startY = yCordinates[8];
+
+                        let xPoints = [];
+                        let yPoints = [];
+
+                        xPoints.push(startX);
+                        yPoints.push(startY);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (1 / 2 * spacer));
+
+                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
+                        yPoints.push(startY + (1 / 2 * spacer));
+
+                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
+                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
+
+                        xPoints.push(startX - (3 / 2 * spacer));
+                        yPoints.push(startY + (2 * spacer));
+
+                        xPoints.push(startX);
+                        yPoints.push(startY + (2 * spacer));
+
+                        xPoints.push(startX);
+                        yPoints.push(startY);
+
+                        this.xPoints = xPoints;
+                        this.yPoints = yPoints;
+
+                    }
+
+                    display() {
+
+                        push();
+                        beginShape();
+                        stroke(25, 107, 230);
+                        strokeWeight(2);
+                        fill(99, 153, 235);
+                        for(let i = 0; i < 8; i++) {
+                            
+                            vertex(this.xPoints[i], this.yPoints[i]);
+                            
+                        }
+                        endShape(CLOSE);
+                        pop();
+
+                    }
                 }
 
                 class Car {
