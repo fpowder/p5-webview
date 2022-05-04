@@ -1,3 +1,4 @@
+// each parking area controll
 let parkingAreas = [];
 
 // parking area 시작 자연수 좌표

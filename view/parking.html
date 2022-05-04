@@ -4,6 +4,7 @@
     <script src="/lib/p5/addons/p5.collide2d.js"></script>
     <script src="/js/wall.js"></script>
     <script src="/js/parkingArea.js"></script>
+    <script src="/js/parkingLot.js"></script>
     <script src="/js/entrance.js"></script>
     <script src="/js/exit.js"></script>
     <script src="/js/car.js"></script>
@@ -115,7 +116,7 @@
                     //walls = new Wall(wallStartEndPoints[0]);
                     for(let startEndPoint of wallStartEndPoints) {
                         let wall = new Wall(startEndPoint);
-                        wall.setCrashLine();
+                        //wall.setCrashLine();
                         walls.push(wall);
                     }
 
@@ -128,7 +129,11 @@
                     // test Car
                     car.push(new Car());        
                     
-                    // wall crush test
+                    // parking area border
+                    /* 
+                        차량이 이동가능한 범위의 벡터를 설정
+                    */
+                    setParkingAreaBorderVector();
 
                 }
                 
@@ -161,17 +166,16 @@
                         parkingAreas[i].display();
                     }
 
-                    // walls display
-                    // walls.display();
-                    for(let wall of walls) {
-                        wall.display();
-                    }
-
                     // parking lot entrance display
                     entrance.display();
                     
                     // parking lot exit display
                     exit.display();
+
+                    // parking lot wall display
+                    for(let wall of walls) {
+                        wall.display();
+                    } 
 
                     // test car display
                     if(car[0].length > 0) {
@@ -184,7 +188,6 @@
                         car.splice(0, 1);
                     }
 
-                    // noLoop(); 
                 }
             </script>
         </body>

@@ -1,26 +1,21 @@
 let walls = [];
-let wallCrashPoly = [];
 
 const wallStartEndPoints =[
     {
         start: { x: 6, y: 0 },
-        end: { x: 7, y: 11 },
-        wallDirection: 'left'
+        end: { x: 7, y: 11 }
     },
     {
         start: { x: 0, y: 0 },
-        end: { x: 6, y: 1 },
-        wallDirection: 'down'
+        end: { x: 6, y: 1 }
     },
     {
         start: { x: 0, y: 1 },
-        end: { x: 1, y: 11},
-        wallDirection: 'right'
+        end: { x: 1, y: 11}
     }, 
     {
         start: { x: 0, y: 11 },
-        end: { x: 7, y: 12 },
-        wallDirection: 'up'    
+        end: { x: 7, y: 12 }
     } 
 ];  
 
@@ -42,28 +37,5 @@ class Wall {
             }   
         }
         pop();
-    }
-
-    setCrashLine() {
-        let direction = this.wall.direction;
-        switch(direction) {
-            case 'left':
-                wallCrashPoly.push(createVector(xCordinates[this.wall.start.x], yCordinates[this.wall.start.y]));
-                wallCrashPoly.push(createVector(xCordinates[this.wall.start.x], yCordinates[this.wall.end.y]));
-                break;
-            case 'right':
-                wallCrashPoly.push(createVector(xCordinates[this.wall.end.x], yCordinates[this.wall.start.y]));
-                wallCrashPoly.push(createVector(xCordinates[this.wall.end.x], yCordinates[this.wall.end.y]));
-                break;
-            case 'up':
-                wallCrashPoly.push(createVector(xCordinates[this.wall.start.x], yCordinates[this.wall.start.y]));
-                wallCrashPoly.push(createVector(xCordinates[this.wall.end.x], yCordinates[this.wall.start.y]));
-                break;
-            case 'down':
-                wallCrashPoly.push(createVector(xCordinates[this.wall.start.x], yCordinates[this.wall.end.y]));
-                wallCrashPoly.push(createVector(xCordinates[this.wall.end.x], yCordinates[this.wall.end.y]));
-                break;
-            default:
-        }
     }
 }
