@@ -2,6 +2,11 @@
     <head>
     <script src="/lib/p5/p5.min.js"></script>
     <script src="/lib/p5/addons/p5.collide2d.js"></script>
+    <script src="/js/wall.js"></script>
+    <script src="/js/parkingArea.js"></script>
+    <script src="/js/entrance.js"></script>
+    <script src="/js/exit.js"></script>
+    <script src="/js/car.js"></script>
         <body style="touch-action: auto; overflow: hidden; margin: 0%; padding: 0%;">
             <script>
                 // (() => {
@@ -42,8 +47,8 @@
                 */
                 
                 // 가로 세로 cell수
-                let xGridCnt = 6;
-                let yGridCnt = 10;
+                let xGridCnt = 7;
+                let yGridCnt = 12;
 
                 // let xGridCnt = 60;
                 // let yGridCnt = 168;
@@ -94,34 +99,25 @@
                     yCordinates.push(y * spacer);
                     yCenters.push(y * spacer + (spacer / 2))
                 }
-
+                
                 let canvas;
-
-                //test
-                let jitter;
-
-                let parkingAreas = [];
-                let walls;
-
-                let entrance;
-                let exit;
-
-                // test car
-                let car = [];
 
                 function setup() {
 
                     canvas = createCanvas(cnvWidth, cnvHeight);
                     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
-
-                    jitter =  new Jitter();
                     
                     for(let i = 0; i < pStartPoints.length; i ++) {
                         parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
                     }
 
                     // wall set
-                    walls = new Wall();
+                    //walls = new Wall(wallStartEndPoints[0]);
+                    for(let startEndPoint of wallStartEndPoints) {
+                        let wall = new Wall(startEndPoint);
+                        wall.setCrashLine();
+                        walls.push(wall);
+                    }
 
                     // parking lot entrance
                     entrance = new Entrance();
@@ -130,19 +126,11 @@
                     exit = new Exit();
 
                     // test Car
-                    car.push(new Car());                    
+                    car.push(new Car());        
+                    
+                    // wall crush test
 
                 }
-
-                // let xCount = 0;
-                // let yCount = 0;
-
-                // function mousePressed(event) {
-                //     console.log(event);
-                //     for(let i = 0; i < parkingAreas.length; i++){
-                //         parkingAreas[i].clicked();
-                //     }
-                // }
                 
                 function draw() {
                     background(255);
@@ -167,9 +155,6 @@
                     line(width-1, 0, width-1, height-1);
                     line(0, height-1, width-1, height-1);
                     pop();
-                    // jitter test
-                    jitter.display();
-                    jitter.move();
 
                     // parkingArea display
                     for(let i = 0; i < parkingAreas.length; i++) {
@@ -177,7 +162,10 @@
                     }
 
                     // walls display
-                    walls.display();
+                    // walls.display();
+                    for(let wall of walls) {
+                        wall.display();
+                    }
 
                     // parking lot entrance display
                     entrance.display();
@@ -186,315 +174,18 @@
                     exit.display();
 
                     // test car display
-                    car[0].display();
+                    if(car[0].length > 0) {
+                        car[0].display();
+                    }
                     car[0].move();
                     car[0].exit();
-                    car[0].remove();
+                    if(car[0].length && car[0].length <= 0) {
+                        car[0].remove();
+                        car.splice(0, 1);
+                    }
 
                     // noLoop(); 
                 }
-
-                class Jitter {
-                    constructor() {
-                        this.x = random(width);
-                        this.y = random(height);
-                        this.diameter = random(10, 30);
-                        this.speed = 1;
-                    }
-
-                    move() {
-                        this.x += random(-this.speed, this.speed);
-                        this.y += random(-this.speed, this.speed);
-                    }
-
-                    display() {
-                        ellipse(this.x, this.y, this.diameter, this.diameter);
-                    }
-                }
-                
-                // parking area 시작 자연수 좌표
-                const pStartPoints = [
-                    {
-                        x: 2,
-                        y: 2
-                    },
-                    {
-                        x: 2,
-                        y: 4
-                    },
-                    {
-                        x: 2,
-                        y: 6
-                    }
-                ];
-                
-                // PA => Parking Area
-                class ThreeByTwoPA {
-                    constructor(x, y) {
-                        this.startX = xCordinates[x];
-                        this.startY = yCordinates[y];
-
-                        this.width = xCordinates[x + 3] - xCordinates[x];
-                        this.height = yCordinates[y + 2] - yCordinates[y];
-
-                        this.lineCol = color(40, 199, 69);
-                        this.col = color(115, 235, 125);
-
-                        let dom = createDiv();
-                        dom.size(this.width, this.height);
-                        dom.position(this.startX + divAdjWidth, this.startY + divAdjHeight);
-                        // dom.addEventListener('touchstart', () => {
-                        //     dom.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2);
-                        // });
-                        dom.mousePressed(() => {
-                            alert('This is parking area! : ' + this.startX + ',' + this.startY);
-                        });
-                        this.dom = dom;
-
-                        //this.speed = 1;
-                    }
-                    
-                    // move() {
-                    //     this.startX += random(-this.speed, this.speed);
-                    //     this.startY += random(-this.speed, this.speed);
-                    //     this.dom.position(this.startX + divAdjWidth, this.startY + divAdjHeight);
-                    // }
-
-                    display() {
-                        push();
-                        stroke(this.lineCol);
-                        //stroke(51);
-                        fill(this.col);
-                        strokeWeight(3);
-                        rect(this.startX, this.startY, this.width, this.height);
-                        pop();
-                    }
-
-                    clicked() {
-                        console.log('clicked'); 
-                        this.col = color(255, 0, 200);   
-                    }
-
-                }
-
-                const wallStartEndPoints =[
-                    {
-                        start: { x: 5, y: 0 },
-                        end: { x: 5, y: 9 }
-                    }
-                ];
-
-                class Wall {
-                    contructor() {
-                        this.walls = wallStartEndPoints;
-                        this.wallsLength = wallStartEndPoints.length;
-                    }
-
-                    display() {
-                        push();
-                        for(let i = 0; i < wallStartEndPoints.length; i++) {
-                            let wall = wallStartEndPoints[i]; 
-
-                            for(let j = 0; j <= wall.end.x - wall.start.x; j++) {
-
-                                for(let k = 0; k <= wall.end.y - wall.start.y; k++) {
-                                    stroke(47, 48, 48);
-                                    strokeWeight(2);
-                                    fill(93, 97, 97);
-                                    rect(xCordinates[wall.start.x + j], yCordinates[wall.start.y + k], spacer, spacer);
-                                }
-
-                            }
-
-                        }
-                        pop();
-                    }
-                }
-
-                class Entrance {
-                    constructor() {
-
-                        let startX = xCordinates[5];
-                        let startY = yCordinates[0];
-
-                        let xPoints = [];
-                        let yPoints = [];
-
-                        xPoints.push(startX);
-                        yPoints.push(startY);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (1 / 2 * spacer));
-
-                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
-                        yPoints.push(startY + (1 / 2 * spacer));
-
-                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
-                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (2 * spacer));
-
-                        xPoints.push(startX);
-                        yPoints.push(startY + (2 * spacer));
-
-                        xPoints.push(startX);
-                        yPoints.push(startY);
-
-                        this.xPoints = xPoints;
-                        this.yPoints = yPoints;
-
-                    }
-
-                    display() {
-
-                        push();
-                        beginShape();
-                        stroke(25, 107, 230);
-                        strokeWeight(2);
-                        fill(99, 153, 235);
-                        for(let i = 0; i < 8; i++) {
-                            
-                            vertex(this.xPoints[i], this.yPoints[i]);
-                            
-                        }
-                        endShape(CLOSE);
-                        pop();
-
-                    }
-                }
-
-                class Exit {
-                    constructor() {
-
-                        let startX = xCordinates[5];
-                        let startY = yCordinates[8];
-
-                        let xPoints = [];
-                        let yPoints = [];
-
-                        xPoints.push(startX);
-                        yPoints.push(startY);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (1 / 2 * spacer));
-
-                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
-                        yPoints.push(startY + (1 / 2 * spacer));
-
-                        xPoints.push(startX - (3 / 2 * spacer) + spacer);
-                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (1 / 2 * spacer) + spacer);
-
-                        xPoints.push(startX - (3 / 2 * spacer));
-                        yPoints.push(startY + (2 * spacer));
-
-                        xPoints.push(startX);
-                        yPoints.push(startY + (2 * spacer));
-
-                        xPoints.push(startX);
-                        yPoints.push(startY);
-
-                        this.xPoints = xPoints;
-                        this.yPoints = yPoints;
-
-                        this.poly = [];
-
-                        for(let i = 3; i < 5; i++) {
-                            this.poly.push(createVector(xPoints[i], yPoints[i]));
-                        }
-
-                    }
-
-                    display() {
-
-                        push();
-                        beginShape();
-                        stroke(25, 107, 230);
-                        strokeWeight(2);
-                        fill(99, 153, 235);
-                        for(let i = 0; i < 8; i++) {
-                            
-                            vertex(this.xPoints[i], this.yPoints[i]);
-                            
-                        }
-                        endShape(CLOSE);
-                        pop();
-
-                    }
-                }
-
-                class Car {
-                    constructor(startPoint, endPoint) {
-                        this.uuid = 'car1';
-
-                        this.curX = xCordinates[0] + (spacer / 2);
-                        this.curY = yCordinates[8] + (spacer / 2);
-
-                        this.currentPosition = {
-                            x: this.curX,
-                            y: this.curY
-                        }
-
-                        this.lastPosition = {
-                            x: this.curX,
-                            y: this.curY
-                        }
-
-                        // car size => 2 cell by 1 cell
-                        this.length = 2 * spacer;
-                        this.width = 1 * spacer;
-
-                        this.speed = 1;
-                        this.direction;
-
-                        this.rect;
-                    }
-
-                    exit() {
-                        let exitCollision = collideRectPoly(this.curX, this.curY, this.length, this.width, exit.poly);
-                        if(exitCollision) {
-                            this.length -= 1;
-                        }
-                    }
-
-                    remove() {
-                        console.log(this.length);
-                        if(this.length <= 0) {
-                            this.length = 0;
-                        }
-                    }
-
-                    move() {
-                        this.curX += 1;
-                    }
-
-                    display() {
-                        push();
-                        stroke(20, 20, 128);
-                        strokeWeight(2);
-                        fill(98, 23, 133);
-                        this.rect = rect(this.curX, this.curY, this.length, this.width, 10);
-                        // rect(mouseX, mouseY, this.length, this.width, 10);
-                        // let hit = collideRectPoly(mouseX, mouseY, this.length, this.width, exit.poly);
-                        // console.log(hit);
-                        pop();
-                    }
-
-
-                }
-
             </script>
         </body>
     </head>
