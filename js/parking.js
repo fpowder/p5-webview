@@ -94,10 +94,15 @@ let canvas;
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
-const body = Matter.Body;
+const Body = Matter.Body;
+
+// 차량뒤 먼지 표현
+const exaustClouds = 25;
 
 let world;
 let engine;
+
+let car;
 
 function setup() {
 
@@ -125,7 +130,12 @@ function setup() {
         walls.push(wall);
     }
 
-   
+    const redHexVals = [255, 100, 100];
+    car = new Car(redHexVals, {x: 1, y: 1});
+
+    entrance = new Entrance();
+    exit = new Exit();
+    
     // parking area border
     /* 
         차량이 이동가능한 범위의 벡터를 설정
@@ -168,15 +178,12 @@ function draw() {
         wall.display();
     } 
 
-    // test car display
-    if(car[0].length > 0) {
-        car[0].display();
-    }
-    car[0].move();
-    car[0].exit();
-    if(car[0].length && car[0].length <= 0) {
-        car[0].remove();
-        car.splice(0, 1);
-    }
+    entrance.display();
+    exit.display();
+
+    Engine.update(engine);
+
+    car.render();
+    car.update();
 
 }
