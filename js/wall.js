@@ -25,7 +25,8 @@ class Wall {
 
         // 벽 객체가 생성됨과 동시에 matter 물리엔진 적용
         /*
-
+            friction: 마찰
+            restitution: 복원
         */
         let wallOptions = {
             friction: 0.5,

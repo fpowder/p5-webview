@@ -125,15 +125,7 @@ function setup() {
         walls.push(wall);
     }
 
-    // parking lot entrance
-    entrance = new Entrance();
-
-    // parking lot exit
-    exit = new Exit();
-
-    // test Car
-    car.push(new Car());        
-    
+   
     // parking area border
     /* 
         차량이 이동가능한 범위의 벡터를 설정
