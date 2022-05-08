@@ -46,7 +46,7 @@ class Car {
         this.curX = mouseX;
         this.curY = mouseY;
         let hit = collideRectPoly(this.curX, this.curY, this.length, this.width, parkingCrashPoly);
-        console.log(hit);
+        //console.log(hit);
     }
 
     display() {
