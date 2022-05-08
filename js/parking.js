@@ -163,12 +163,6 @@ function draw() {
         parkingAreas[i].display();
     }
 
-    // parking lot entrance display
-    entrance.display();
-    
-    // parking lot exit display
-    exit.display();
-
     // parking lot wall display
     for(let wall of walls) {
         wall.display();
