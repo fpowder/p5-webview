@@ -6,7 +6,7 @@ const port = 3000;
 const path = require('path');
 
 app.use(cookieParser());
-app.use('/lib/p5', express.static(path.join(__dirname, 'lib', 'p5')));
+app.use('/lib', express.static(path.join(__dirname, 'lib')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 
 app.get('/', (req, res) => {
@@ -19,6 +19,10 @@ app.get('/webview/parking-lot', (req, res) => {
     //res.cookie('webView', req.cookies);
     res.sendFile(path.join(__dirname, './view/parking.html'));
     
+});
+
+app.get('/car-soccer', (req, res) => {
+    res.sendFile(path.join(__dirname, './view/carSoccer.html'));
 });
 
 app.listen(port, () => {
