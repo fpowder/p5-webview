@@ -90,12 +90,29 @@ for(let y = 0; y < yGridCnt; y++) {
 }
 
 let canvas;
+//matterjs 물리엔진이 적용된 world, engine, body 요소등을 정의
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const body = Matter.Body;
+
+let world;
+let engine;
 
 function setup() {
 
     canvas = createCanvas(cnvWidth, cnvHeight);
     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
-    
+
+    // matter js 물리엔진 설저
+    /* 
+     평면이므로 y축 gravity수치는 0
+    */
+    engine = Engine.create();
+    world = engine.world;
+    engine.world.gravity.y = 0;
+
+
     for(let i = 0; i < pStartPoints.length; i ++) {
         parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
     }
@@ -121,7 +138,7 @@ function setup() {
     /* 
         차량이 이동가능한 범위의 벡터를 설정
     */
-    setParkingAreaBorderVector();
+    //setParkingAreaBorderVector();
 
 }
 

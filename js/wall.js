@@ -22,7 +22,21 @@ const wallStartEndPoints =[
 class Wall {
     constructor(startEndPoint) {
         this.wall = startEndPoint;
-        this.crashLine;
+
+        // 벽 객체가 생성됨과 동시에 matter 물리엔진 적용
+        /*
+
+        */
+        let wallOptions = {
+            friction: 0.5,
+            restitution: 0.5,
+            isStatic: true
+        };
+        let width = spacer * (this.wall.end.x - this.wall.start.x);
+        let height = spacer * (this.wall.end.y - this.wall.start.y);
+        this.body = Bodies.rectangle(xCordinates[this.wall.start.x], yCordinates[this.wall.start.y], width, height, wallOptions);
+        World.add(world, this.body);
+
     }
 
     display() {
