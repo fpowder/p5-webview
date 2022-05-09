@@ -3,25 +3,35 @@ let walls = [];
 const wallStartEndPoints =[
     {
         start: { x: 6, y: 0 },
-        end: { x: 7, y: 11 }
+        end: { x: 7, y: 11 },
+        direction: 'left'
     },
     {
         start: { x: 0, y: 0 },
-        end: { x: 6, y: 1 }
+        end: { x: 6, y: 1 },
+        direction: 'right'
     },
     {
         start: { x: 0, y: 1 },
-        end: { x: 1, y: 11}
+        end: { x: 1, y: 11},
+        direction: 'down'
     }, 
     {
         start: { x: 0, y: 11 },
-        end: { x: 7, y: 12 }
+        end: { x: 7, y: 12 },
+        direction: 'up'
     } 
 ];  
 
 class Wall {
     constructor(startEndPoint) {
         this.wall = startEndPoint;
+        
+        // set wall angle
+        let angle = 0;
+        if(this.wall.direction === 'down' || 'up') {
+            angle = PI / 2;
+        }
 
         // 벽 객체가 생성됨과 동시에 matter 물리엔진 적용
         /*
@@ -31,11 +41,17 @@ class Wall {
         let wallOptions = {
             friction: 0.5,
             restitution: 0.5,
-            isStatic: true
+            angle: 0,
+            isStatic: true,
+            render: { fillStyle: '#060a19', visible: true }
         };
         let width = spacer * (this.wall.end.x - this.wall.start.x);
         let height = spacer * (this.wall.end.y - this.wall.start.y);
-        this.body = Bodies.rectangle(xCordinates[this.wall.start.x], yCordinates[this.wall.start.y], width, height, wallOptions);
+
+        let xCenter = xCenters[this.wall.start.x + Math.floor((this.wall.end.x - this.wall.start.x) / 2)];
+        let yCenter = yCenters[this.wall.start.y + Math.floor((this.wall.end.y - this.wall.start.y) / 2)];  
+
+        this.body = Bodies.rectangle(xCenter, yCenter, width, height, wallOptions);
         World.add(world, this.body);
 
     }

@@ -173,7 +173,7 @@ function draw() {
         parkingAreas[i].display();
     }
 
-    // parking lot wall display
+    //parking lot wall display
     for(let wall of walls) {
         wall.display();
     } 

@@ -1,9 +1,31 @@
-// test car
+function keyReleased() {
+    if (keyCode == UP_ARROW) {
+        car.accelerating(false);
+    } else if(keyCode === DOWN_ARROW){
+        car.accelerating(false);
+    }else if (keyCode == RIGHT_ARROW || keyCode == LEFT_ARROW) {
+        car.rotate(0);
+    }
+}
+
+function keyPressed() {
+    if (keyCode == RIGHT_ARROW) {
+        car.rotate(PI / 72);
+    } else if (keyCode == LEFT_ARROW) {
+        car.rotate(-PI / 72);
+    } else if (keyCode == UP_ARROW) {
+        car.accelerating(true, true);
+    } else if (keyCode == DOWN_ARROW) {
+        car.accelerating(true, false);
+    }
+}
+
+// car
 class Car {
     constructor(paintColor, startPoint) {
         this.uuid = 'car1';
         
-        this.position = createVector(xCordinates[startPoint.x], yCordinates[startPoint.y]);
+        this.position = createVector(xCenters[startPoint.x], yCenters[startPoint.y]);
         this.width = cnvWidth / 18;
         this.length = this.width * 2;
 
@@ -11,6 +33,8 @@ class Car {
         this.rotation = 0;
         this.color = paintColor;
         this.history = [];
+
+        this.accelWay = true; // true: accelerate to forward, false: accelerate to back 
 
         // matter body options
         const options = { density: 0.01, friction: 0.2, mass: 50 };
@@ -41,13 +65,14 @@ class Car {
         this.position.y = this.body.position.y;
     }
 
-    accelerating(isAccelerating) {
+    accelerating(isAccelerating, accelWay) {
         this.isAccelerating = isAccelerating;
+        this.accelWay = accelWay;
     }
 
     accelerate() {
         let force = p5.Vector.fromAngle(this.body.angle);
-        force.mult(0.02);
+        this.accelWay === true ? force.mult(0.02) : force.mult(-0.02);
         Body.applyForce(this.body, this.body.position, force);
     }
 
