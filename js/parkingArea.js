@@ -49,7 +49,7 @@ class ThreeByTwoPA {
     //     this.dom.position(this.startX + divAdjWidth, this.startY + divAdjHeight);
     // }
 
-    display() {
+    render() {
         push();
         stroke(this.lineCol);
         //stroke(51);

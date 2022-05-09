@@ -22,10 +22,10 @@ class Entrance {
         yPoints.push(startY + (1 / 4 * spacer));
 
         xPoints.push(startX - (1 / 4 * spacer));
-        yPoints.push(startY + (1 / 4 * spacer) + (3 /2 * spacer));
+        yPoints.push(startY + (1 / 4 * spacer) + (3 / 2 * spacer));
 
         xPoints.push(startX - (3 / 2 * spacer));
-        yPoints.push(startY + (1 / 4 * spacer) + (3 /2 * spacer));
+        yPoints.push(startY + (1 / 4 * spacer) + (3 / 2 * spacer));
 
         xPoints.push(startX - (3 / 2 * spacer));
         yPoints.push(startY + (2 * spacer));
@@ -45,9 +45,36 @@ class Entrance {
             this.poly.push(createVector(xPoints[i], yPoints[i]));
         }
 
-    }
+        //set entrance collision walls
+        let wallOptions = {
+            friction: 0.5,
+            restitution: 0.5,
+            angle: 0,
+            isStatic: true
+        };
 
-    display() {
+        // poly []의 0,2번째의 벡터의 차를 구한후, /2 만큼 더하여 중심 좌표를 구한다.
+        let startVector = createVector(this.xPoints[0], this.yPoints[0]);
+        let endVector = createVector(this.xPoints[2], this.yPoints[2]);
+        let sub = Vector.sub(endVector, startVector);
+        let xDiff = startVector.x + (sub.x / 2);
+        let yDiff = startVector.y + (sub.y / 2)
+
+        this.entranceWall = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+        
+        // poly []의 5,7번째의 벡터의 차를 구한후, /2 만큼 더하여 중심 좌표를 구한다.
+        startVector = createVector(this.xPoints[5], this.yPoints[5]);
+        endVector = createVector(this.xPoints[7], this.yPoints[7]);
+        sub = Vector.sub(endVector, startVector);
+        xDiff = startVector.x + (sub.x / 2);
+        yDiff = startVector.y + (sub.y / 2)
+        this.entranceWall2 = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+
+        World.add(world, this.entranceWall);
+        World.add(world, this.entranceWall2);
+    }   
+
+    render() {
 
         push();
         beginShape();

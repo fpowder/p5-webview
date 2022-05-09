@@ -81,6 +81,14 @@ class Car {
         Body.setAngularVelocity(this.body, rotation);
     }
 
+    randomCrazyWay() {
+
+        const desired = p5.Vector.sub(car.position, crazyCar.position);
+        const angle = desired.heading();
+        Body.setAngle(this.body, angle);
+
+    }
+
     render() {
         let angle = this.body.angle;
         push();

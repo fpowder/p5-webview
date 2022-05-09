@@ -3,35 +3,25 @@ let walls = [];
 const wallStartEndPoints =[
     {
         start: { x: 6, y: 0 },
-        end: { x: 7, y: 11 },
-        direction: 'left'
+        end: { x: 7, y: 11 }
     },
     {
         start: { x: 0, y: 0 },
-        end: { x: 6, y: 1 },
-        direction: 'right'
+        end: { x: 6, y: 1 }
     },
     {
         start: { x: 0, y: 1 },
-        end: { x: 1, y: 11},
-        direction: 'down'
+        end: { x: 1, y: 11}
     }, 
     {
         start: { x: 0, y: 11 },
-        end: { x: 7, y: 12 },
-        direction: 'up'
+        end: { x: 7, y: 12 }
     } 
 ];  
 
 class Wall {
     constructor(startEndPoint) {
         this.wall = startEndPoint;
-        
-        // set wall angle
-        let angle = 0;
-        if(this.wall.direction === 'down' || 'up') {
-            angle = PI / 2;
-        }
 
         // 벽 객체가 생성됨과 동시에 matter 물리엔진 적용
         /*
@@ -56,7 +46,7 @@ class Wall {
 
     }
 
-    display() {
+    render() {
         push();
         for(let j = 0; j < this.wall.end.x - this.wall.start.x; j++) {
 

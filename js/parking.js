@@ -95,6 +95,7 @@ const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
+const Vector = Matter.Vector;
 
 // 차량뒤 먼지 표현
 const exaustClouds = 25;
@@ -103,6 +104,7 @@ let world;
 let engine;
 
 let car;
+let crazyCar;
 
 function setup() {
 
@@ -131,8 +133,10 @@ function setup() {
     }
 
     const redHexVals = [255, 100, 100];
+    const blueHexCals = [100, 100, 255];
     car = new Car(redHexVals, {x: 1, y: 1});
-
+    crazyCar = new Car(blueHexCals, {x: 1, y: 10});
+    
     entrance = new Entrance();
     exit = new Exit();
     
@@ -170,20 +174,26 @@ function draw() {
 
     // parkingArea display
     for(let i = 0; i < parkingAreas.length; i++) {
-        parkingAreas[i].display();
+        parkingAreas[i].render();
     }
 
     //parking lot wall display
     for(let wall of walls) {
-        wall.display();
+        wall.render();
     } 
 
-    entrance.display();
-    exit.display();
+    entrance.render();
+    exit.render();
 
     Engine.update(engine);
 
     car.render();
     car.update();
+
+    crazyCar.render();
+    crazyCar.update();
+
+    // crazyCar.accelerating(true, true);
+    // crazyCar.randomCrazyWay();
 
 }

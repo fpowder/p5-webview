@@ -45,9 +45,37 @@ class Exit {
             this.poly.push(createVector(xPoints[i], yPoints[i]));
         }
 
+        //set entrance collision walls
+        let wallOptions = {
+            friction: 0.5,
+            restitution: 0.5,
+            angle: 0,
+            isStatic: true
+        };
+
+        let startVector = createVector(this.xPoints[0], this.yPoints[0]);
+        let endVector = createVector(this.xPoints[2], this.yPoints[2]);
+
+        let sub = Vector.sub(endVector, startVector);
+
+        let xDiff = startVector.x + (sub.x / 2);
+        let yDiff = startVector.y + (sub.y / 2)
+
+        this.entranceWall = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+        
+        startVector = createVector(this.xPoints[5], this.yPoints[5]);
+        endVector = createVector(this.xPoints[7], this.yPoints[7]);
+        sub = Vector.sub(endVector, startVector);
+        xDiff = startVector.x + (sub.x / 2);
+        yDiff = startVector.y + (sub.y / 2)
+        this.entranceWall2 = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+
+        World.add(world, this.entranceWall);
+        World.add(world, this.entranceWall2);
+
     }
 
-    display() {
+    render() {
 
         push();
         beginShape();
