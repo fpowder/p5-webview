@@ -79,14 +79,18 @@ let yCordinates = [];
 let xCenters = [];
 let yCenters = [];
 
-for(let x = 0; x < xGridCnt; x++) {
+for(let x = 0; x <= xGridCnt; x++) {
     xCordinates.push(x * spacer);
-    xCenters.push(x * spacer + (spacer / 2));
+    if(x !== xGridCnt) {
+        xCenters.push(x * spacer + (spacer / 2));
+    }
 }
 
-for(let y = 0; y < yGridCnt; y++) {
+for(let y = 0; y <= yGridCnt; y++) {
     yCordinates.push(y * spacer);
-    yCenters.push(y * spacer + (spacer / 2))
+    if(y !== yGridCnt) {
+        yCenters.push(y * spacer + (spacer / 2));
+    }
 }
 
 let canvas;
@@ -106,8 +110,10 @@ let engine;
 let car;
 let crazyCar;
 
+p5.disableFriendlyErrors = true; // for mobile performance
 function setup() {
-
+    pixelDensity(1);
+    frameRate(60); 
     canvas = createCanvas(cnvWidth, cnvHeight);
     canvas.position((window.innerWidth - cnvWidth) / 2, (window.innerHeight - cnvHeight) / 2, 'fixed');
 
@@ -177,14 +183,6 @@ function draw() {
         parkingAreas[i].render();
     }
 
-    //parking lot wall display
-    for(let wall of walls) {
-        wall.render();
-    } 
-
-    entrance.render();
-    exit.render();
-
     Engine.update(engine);
 
     car.render();
@@ -193,7 +191,15 @@ function draw() {
     crazyCar.render();
     crazyCar.update();
 
-    // crazyCar.accelerating(true, true);
-    // crazyCar.randomCrazyWay();
+    crazyCar.accelerating(true, true);
+    crazyCar.randomCrazyWay();
+
+    entrance.render();
+    exit.render();
+
+    //parking lot wall display
+    for(let wall of walls) {
+        wall.render();
+    } 
 
 }

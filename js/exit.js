@@ -58,17 +58,17 @@ class Exit {
 
         let sub = Vector.sub(endVector, startVector);
 
-        let xDiff = startVector.x + (sub.x / 2);
-        let yDiff = startVector.y + (sub.y / 2)
+        let xCenter = startVector.x + (sub.x / 2);
+        let yCenter = startVector.y + (sub.y / 2)
 
-        this.entranceWall = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+        this.entranceWall = Bodies.rectangle(xCenter, yCenter, 3/2*spacer, 1/4*spacer, wallOptions);
         
         startVector = createVector(this.xPoints[5], this.yPoints[5]);
         endVector = createVector(this.xPoints[7], this.yPoints[7]);
         sub = Vector.sub(endVector, startVector);
-        xDiff = startVector.x + (sub.x / 2);
-        yDiff = startVector.y + (sub.y / 2)
-        this.entranceWall2 = Bodies.rectangle(xDiff, yDiff, 3/2*spacer, 1/4*spacer, wallOptions);
+        xCenter = startVector.x + (sub.x / 2);
+        yCenter = startVector.y + (sub.y / 2)
+        this.entranceWall2 = Bodies.rectangle(xCenter, yCenter, 3/2*spacer, 1/4*spacer, wallOptions);
 
         World.add(world, this.entranceWall);
         World.add(world, this.entranceWall2);

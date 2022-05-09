@@ -32,14 +32,19 @@ class Wall {
             friction: 0.5,
             restitution: 0.5,
             angle: 0,
-            isStatic: true,
-            render: { fillStyle: '#060a19', visible: true }
+            isStatic: true
         };
         let width = spacer * (this.wall.end.x - this.wall.start.x);
         let height = spacer * (this.wall.end.y - this.wall.start.y);
 
-        let xCenter = xCenters[this.wall.start.x + Math.floor((this.wall.end.x - this.wall.start.x) / 2)];
-        let yCenter = yCenters[this.wall.start.y + Math.floor((this.wall.end.y - this.wall.start.y) / 2)];  
+        // let xCenter = xCenters[this.wall.start.x + Math.floor((this.wall.end.x - this.wall.start.x) / 2)];
+        // let yCenter = yCenters[this.wall.start.y + Math.floor((this.wall.end.y - this.wall.start.y) / 2)];  
+
+        let startVector = createVector(xCordinates[this.wall.start.x], yCordinates[this.wall.start.y]);
+        let endVector = createVector(xCordinates[this.wall.end.x], yCordinates[this.wall.end.y]);
+        let sub = Vector.sub(endVector, startVector);
+        let xCenter = startVector.x + (sub.x / 2);
+        let yCenter = startVector.y + (sub.y / 2);
 
         this.body = Bodies.rectangle(xCenter, yCenter, width, height, wallOptions);
         World.add(world, this.body);
