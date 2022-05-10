@@ -93,7 +93,10 @@ class Car {
         let gsapMove = gsap.to(this.body.position, {
             x: 400, 
             y: 700,
-            duration: 2
+            duration: 2,
+            onUpdate: () => {
+                console.log(this.body.position);
+            }
         });
         console.log(gsapMove);
     }
