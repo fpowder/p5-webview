@@ -89,6 +89,15 @@ class Car {
 
     }
 
+    gsapMove() {
+        let gsapMove = gsap.to(this.body.position, {
+            x: 400, 
+            y: 700,
+            duration: 2
+        });
+        console.log(gsapMove);
+    }
+
     render() {
         let angle = this.body.angle;
         push();

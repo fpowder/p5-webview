@@ -143,6 +143,8 @@ function setup() {
     car = new Car(redHexVals, {x: 1, y: 1});
     crazyCar = new Car(blueHexCals, {x: 1, y: 10});
     
+    crazyCar.gsapMove();
+
     entrance = new Entrance();
     exit = new Exit();
     
@@ -191,8 +193,8 @@ function draw() {
     crazyCar.render();
     crazyCar.update();
 
-    crazyCar.accelerating(true, true);
-    crazyCar.randomCrazyWay();
+    // crazyCar.accelerating(true, true);
+    // crazyCar.randomCrazyWay();
 
     entrance.render();
     exit.render();
