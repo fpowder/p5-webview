@@ -110,7 +110,8 @@ let engine;
 let car;
 let crazyCar;
 
-p5.disableFriendlyErrors = true; // for mobile performance
+ // for mobile performance set this true 
+p5.disableFriendlyErrors = false;
 function setup() {
     pixelDensity(1);
     frameRate(60); 
@@ -124,6 +125,7 @@ function setup() {
     engine = Engine.create();
     world = engine.world;
     engine.world.gravity.y = 0;
+    Matter.Runner.run(engine);
 
 
     for(let i = 0; i < pStartPoints.length; i ++) {
@@ -143,7 +145,7 @@ function setup() {
     car = new Car(redHexVals, {x: 1, y: 1});
     crazyCar = new Car(blueHexCals, {x: 1, y: 10});
     
-    crazyCar.gsapMove();
+    // crazyCar.gsapMove();
 
     entrance = new Entrance();
     exit = new Exit();
@@ -195,7 +197,7 @@ function draw() {
 
     // crazyCar.accelerating(true, true);
     // crazyCar.randomCrazyWay();
-
+        
     entrance.render();
     exit.render();
 

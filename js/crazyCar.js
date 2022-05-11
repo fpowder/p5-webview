@@ -23,7 +23,7 @@ function keyPressed() {
 // car
 class Car {
     constructor(paintColor, startPoint) {
-        this.uuid = 'car1';
+        this.uuid = 'crazyCar1';
         
         this.position = createVector(xCenters[startPoint.x], yCenters[startPoint.y]);
         this.width = cnvWidth / 18;
@@ -37,7 +37,13 @@ class Car {
         this.accelWay = true; // true: accelerate to forward, false: accelerate to back 
 
         // matter body options
-        const options = { density: 0.01, friction: 0.2, mass: 50 };
+        const options = { 
+            density: 0.01, 
+            friction: 0.2, 
+            mass: 50,
+            isStatic: true
+        };
+
         this.body = Bodies.rectangle(
             this.position.x,
             this.position.y,
@@ -89,17 +95,24 @@ class Car {
 
     }
 
-    // gsapMove() {
-    //     let gsapMove = gsap.to(this.body.position, {
-    //         x: 400, 
-    //         y: 700,
-    //         duration: 2,
-    //         onUpdate: () => {
-    //             console.log(this.body.position);
-    //         }
-    //     });
-    //     console.log(gsapMove);
-    // }
+    gsapMove() {
+        let gsapMove = gsap.to(this.body.position, {
+            x: 400, 
+            y: 700,
+            duration: 2,
+            onUpdate: () => {
+                console.log(this.body.position);
+            }
+        });
+        console.log(gsapMove);
+    }
+
+    matterMove() {
+        // this.body.position.x += 1;
+        // let force = p5.Vector.fromAngle(this.body.angle);
+        // Body.applyForce(this.body, this.body.position, force)
+        Body.setPosition(this.body, {x: this.body.position.x + 50 , y: this.body.position.y - 50});
+    }
 
     render() {
         let angle = this.body.angle;
