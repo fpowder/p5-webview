@@ -10,9 +10,9 @@ function keyReleased() {
 
 function keyPressed() {
     if (keyCode == RIGHT_ARROW) {
-        car.rotate(PI /144);
+        car.rotate(PI / 90);
     } else if (keyCode == LEFT_ARROW) {
-        car.rotate(-PI / 144);
+        car.rotate(-PI / 90);
     } else if (keyCode == UP_ARROW) {
         car.accelerating(true, true);
     } else if (keyCode == DOWN_ARROW) {
@@ -37,7 +37,7 @@ class Car {
         this.accelWay = true; // true: accelerate to forward, false: accelerate to back 
 
         // matter body options
-        const options = { friction: 0.5, mass: 50, restitution: 0.5 };
+        const options = { friction: 0.5, mass: 50, restitution: 0.5, density: 50 };
         this.body = Bodies.rectangle(
             this.position.x,
             this.position.y,

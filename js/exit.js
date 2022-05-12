@@ -59,7 +59,7 @@ class Exit {
         let sub = Vector.sub(endVector, startVector);
 
         let xCenter = startVector.x + (sub.x / 2);
-        let yCenter = startVector.y + (sub.y / 2)
+        let yCenter = startVector.y + (sub.y / 2);
 
         this.entranceWall = Bodies.rectangle(xCenter, yCenter, 3/2*spacer, 1/4*spacer, wallOptions);
         
@@ -67,7 +67,7 @@ class Exit {
         endVector = createVector(this.xPoints[7], this.yPoints[7]);
         sub = Vector.sub(endVector, startVector);
         xCenter = startVector.x + (sub.x / 2);
-        yCenter = startVector.y + (sub.y / 2)
+        yCenter = startVector.y + (sub.y / 2);
         this.entranceWall2 = Bodies.rectangle(xCenter, yCenter, 3/2*spacer, 1/4*spacer, wallOptions);
 
         World.add(world, this.entranceWall);

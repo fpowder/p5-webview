@@ -14,11 +14,14 @@ class CrazyCar {
 
         this.accelWay = true; // true: accelerate to forward, false: accelerate to back 
 
+        this.gsapTo;
+
         // matter body options
         const options = { 
             friction: 0.5,
+            restitution: 0.5,
             mass: 50,
-            isStatic: true
+            isStatic: false
         };
 
         this.body = Bodies.rectangle(
@@ -72,23 +75,69 @@ class CrazyCar {
 
     }
 
-    gsapMove() {
-        let gsapMove = gsap.to(this.body.position, {
-            x: 400, 
-            y: 700,
-            duration: 2,
-            onUpdate: () => {
-                console.log(this.body.position);
-            }
-        });
-        console.log(gsapMove);
+    getGsapPosition(gsapPosition) {
+        console.log(gsapPosition);
     }
 
-    matterMove() {
+    gsapMove(x, y) {
+        this.gsapTo = gsap.to(this.body.position, {
+            x: xCenters[x], 
+            y: yCenters[y],
+            duration: 1,
+            onUpdate: () => {
+                console.log(this.body.position);
+                console.log(this.position);
+            },
+            onStart: () => {
+                Body.setStatic(this.body, false);
+                this.body.onCollide((pair) => {
+                    this.gsapTo.pause();
+                    console.log(this.gsapTo);
+                    console.log(this.body.position);
+                    console.log(this.position);
+                    //this.gsapTo.kill();
+                    console.log(pair);
+                    // this.body.setStatic = true;
+                    Body.setStatic(this.body, true);
+                });
+            }
+        });
+    }
+
+    matterMove(x, y) {
         // this.body.position.x += 1;
         // let force = p5.Vector.fromAngle(this.body.angle);
-        // Body.applyForce(this.body, this.body.position, force)
-        Body.setPosition(this.body, {x: this.body.position.x + 50 , y: this.body.position.y - 50});
+        // let force = createVector(1, 0);
+        // console.log(force);
+        // Body.applyForce(this.body, this.body.position, force);
+        //this.break();
+        // Body.setPosition(this.body, {x: this.body.position.x + 50 , y: this.body.position.y - 50});
+                   
+        // let px = 100 + 100 * Math.sin(engine.timing.timestamp * 0.004);
+        // Body.setVelocity(this.body, { x: px - this.body.position.x, y: 0 });
+        // Body.setPosition(this.body, { x: px, y: this.body.position.y });
+
+        Matter.Body.translate(this.body, { x: 1, y: 0 });
+        //this.body.position.x += x;
+        this.body.onCollide((pair) => {
+            console.log(pair);
+            // this.body.setStatic = true;
+            Body.setStatic(this.body, true);
+
+            this.body.position.x = pair.bodyB.position.x;
+            this.body.position.y = pair.bodyB.position.y;
+
+            Matter.Body.translate(this.body, { x: 0, y: 0 });
+
+        });
+    }
+
+    break() {
+        console.log(this.body.position.x);
+        if(Math.round(this.body.position.x / 100) === 4) {
+            this.body.setStatic = true;
+            Body.applyForce(this.body, this.body.position, this.body.force * -1);
+        }
     }
 
     render() {

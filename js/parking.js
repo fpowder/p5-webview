@@ -129,12 +129,14 @@ function setup() {
     engine = Engine.create();
     world = engine.world;
     engine.world.gravity.y = 0;
-    //Matter.Runner.run(engine);
 
-    //create runner
-    runner = Runner.create();
-    Runner.run(runner, engine);   
+    // create runner -> maybe don't need
+    // runner = Runner.create();
+    // Runner.run(runner, engine);   
 
+    //or
+
+    // Matter.Runner.run(engine);
 
     for(let i = 0; i < pStartPoints.length; i ++) {
         parkingAreas.push(new ThreeByTwoPA(pStartPoints[i].x, pStartPoints[i].y));
@@ -202,7 +204,7 @@ function draw() {
 
     crazyCar.render();
     crazyCar.update();
-
+    
     // crazyCar.accelerating(true, true);
     // crazyCar.randomCrazyWay();
         
