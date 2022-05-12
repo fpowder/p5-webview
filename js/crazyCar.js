@@ -1,27 +1,5 @@
-function keyReleased() {
-    if (keyCode == UP_ARROW) {
-        car.accelerating(false);
-    } else if(keyCode === DOWN_ARROW){
-        car.accelerating(false);
-    }else if (keyCode == RIGHT_ARROW || keyCode == LEFT_ARROW) {
-        car.rotate(0);
-    }
-}
 
-function keyPressed() {
-    if (keyCode == RIGHT_ARROW) {
-        car.rotate(PI / 72);
-    } else if (keyCode == LEFT_ARROW) {
-        car.rotate(-PI / 72);
-    } else if (keyCode == UP_ARROW) {
-        car.accelerating(true, true);
-    } else if (keyCode == DOWN_ARROW) {
-        car.accelerating(true, false);
-    }
-}
-
-// car
-class Car {
+class CrazyCar {
     constructor(paintColor, startPoint) {
         this.uuid = 'crazyCar1';
         
@@ -38,8 +16,7 @@ class Car {
 
         // matter body options
         const options = { 
-            density: 0.01, 
-            friction: 0.2, 
+            friction: 0.5,
             mass: 50,
             isStatic: true
         };

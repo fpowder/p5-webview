@@ -100,13 +100,17 @@ const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
 const Vector = Matter.Vector;
+const Runner = Matter.Runner;
+
+//Matter collision event plugin 추가
+Matter.use('matter-collision-events');
 
 // 차량뒤 먼지 표현
 const exaustClouds = 25;
 
 let world;
 let engine;
-
+let runner;
 let car;
 let crazyCar;
 
@@ -125,7 +129,11 @@ function setup() {
     engine = Engine.create();
     world = engine.world;
     engine.world.gravity.y = 0;
-    Matter.Runner.run(engine);
+    //Matter.Runner.run(engine);
+
+    //create runner
+    runner = Runner.create();
+    Runner.run(runner, engine);   
 
 
     for(let i = 0; i < pStartPoints.length; i ++) {
@@ -143,7 +151,7 @@ function setup() {
     const redHexVals = [255, 100, 100];
     const blueHexCals = [100, 100, 255];
     car = new Car(redHexVals, {x: 1, y: 1});
-    crazyCar = new Car(blueHexCals, {x: 1, y: 10});
+    crazyCar = new CrazyCar(blueHexCals, {x: 1, y: 10});
     
     // crazyCar.gsapMove();
 
