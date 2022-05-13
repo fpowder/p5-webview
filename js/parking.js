@@ -203,7 +203,7 @@ function draw() {
     car.update();
 
     crazyCar.render();
-    crazyCar.update();
+    // crazyCar.update();
     
     // crazyCar.accelerating(true, true);
     // crazyCar.randomCrazyWay();

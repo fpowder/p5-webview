@@ -31,7 +31,9 @@ class CrazyCar {
             this.width,
             options
         );
-
+        
+        // Matter.Body.translate(this.body, {x: this.position.x, y: this.position.y});
+            
         // add to world
         World.add(world, this.body);
         
@@ -80,26 +82,28 @@ class CrazyCar {
     }
 
     gsapMove(x, y) {
+
+        this.body.onCollide(async (pair) => {
+            Body.setStatic(this.body, true);
+            this.gsapTo.pause();
+            console.log(this.gsapTo);
+            console.log(this.body.position);
+            console.log(this.position);
+            //this.gsapTo.kill();
+            console.log(pair);
+            // this.body.setStatic = true;
+        });
+
         this.gsapTo = gsap.to(this.body.position, {
             x: xCenters[x], 
             y: yCenters[y],
-            duration: 1,
+            duration: 2,
             onUpdate: () => {
                 console.log(this.body.position);
                 console.log(this.position);
             },
             onStart: () => {
                 Body.setStatic(this.body, false);
-                this.body.onCollide((pair) => {
-                    this.gsapTo.pause();
-                    console.log(this.gsapTo);
-                    console.log(this.body.position);
-                    console.log(this.position);
-                    //this.gsapTo.kill();
-                    console.log(pair);
-                    // this.body.setStatic = true;
-                    Body.setStatic(this.body, true);
-                });
             }
         });
     }
@@ -117,7 +121,7 @@ class CrazyCar {
         // Body.setVelocity(this.body, { x: px - this.body.position.x, y: 0 });
         // Body.setPosition(this.body, { x: px, y: this.body.position.y });
 
-        Matter.Body.translate(this.body, { x: 1, y: 0 });
+        Matter.Body.translate(this.body, { x: x, y: y });
         //this.body.position.x += x;
         this.body.onCollide((pair) => {
             console.log(pair);
